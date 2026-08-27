@@ -31,3 +31,9 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "RMP Desktop ${{ github.ref_name }}"
+          releaseBody: "RMP Desktop release ${{ github.ref_name }}"
+          releaseDraft: false
+          prerelease: false
