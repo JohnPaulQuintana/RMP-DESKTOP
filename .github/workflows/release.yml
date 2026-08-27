@@ -39,3 +39,4 @@ jobs:
           releaseBody: "RMP Desktop release ${{ github.ref_name }}"
           releaseDraft: false
           prerelease: false
+          updaterJsonPreferNsis: true
