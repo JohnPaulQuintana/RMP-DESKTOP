@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "rmp-desktop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "identifier": "com.rmp.desktop",
   "build": {
     "frontendDist": "../dist",
@@ -25,6 +25,7 @@
   },
   "plugins": {
     "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEYxMkE2NDUzOUY0MzdBQQpSV1NxTi9RNVJhWVNEMXFkZmpkVHl1dUZOU2VCT0UzdFpYUndmWWl4QWM4YUFyaWZJcGEzME5ITgo=",
       "endpoints": [
         "https://github.com/JohnPaulQuintana/RMP-DESKTOP/releases/latest/download/latest.json"
       ]
