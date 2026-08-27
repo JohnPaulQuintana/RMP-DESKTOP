@@ -52,7 +52,7 @@ onMounted(() => {
       <img :src="viteLogo" class="vite" alt="Vite logo" />
     </div>
     <div>
-      <h1>RMP Desktop Version 0.1.5</h1>
+      <h1>RMP Desktop Version 0.1.6</h1>
       <p>Edit <code>src/App.vue</code> and save to test <code>HMR</code></p>
       <p>{{ updateStatus }}</p>
 
