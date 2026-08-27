@@ -1,10 +1,47 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { check } from '@tauri-apps/plugin-updater'
+import { relaunch } from '@tauri-apps/plugin-process'
+
 import heroImg from '../assets/hero.png'
 import viteLogo from '../assets/vite.svg'
 import vueLogo from '../assets/vue.svg'
 
 const count = ref(0)
+const updateStatus = ref('Checking updates...')
+
+async function checkForUpdates() {
+  try {
+    const update = await check()
+
+    if (update) {
+      updateStatus.value = `Update available: ${update.version}`
+
+      const confirmed = confirm(
+        `New version ${update.version} is available. Update now?`
+      )
+
+      if (confirmed) {
+        updateStatus.value = 'Downloading update...'
+
+        await update.downloadAndInstall()
+
+        updateStatus.value = 'Restarting application...'
+
+        await relaunch()
+      }
+    } else {
+      updateStatus.value = 'Application is up to date'
+    }
+  } catch (error) {
+    console.error('Updater error:', error)
+    updateStatus.value = 'Update check failed'
+  }
+}
+
+onMounted(() => {
+  checkForUpdates()
+})
 </script>
 
 <template>
@@ -15,8 +52,17 @@ const count = ref(0)
       <img :src="viteLogo" class="vite" alt="Vite logo" />
     </div>
     <div>
-      <h1>Get started New Updates Version 0.1.3</h1>
+      <h1>RMP Desktop Version 0.1.5</h1>
       <p>Edit <code>src/App.vue</code> and save to test <code>HMR</code></p>
+      <p>{{ updateStatus }}</p>
+
+<button 
+  type="button" 
+  @click="checkForUpdates"
+>
+  Check for Updates
+</button>
+
     </div>
     <button type="button" class="counter" @click="count++">
       Count is {{ count }}
