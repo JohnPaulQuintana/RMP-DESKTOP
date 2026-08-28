@@ -6,6 +6,7 @@ import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
 
 onMounted(async () => {
+  console.log("App mounted");
   authStore.loadAuth();
 
   await listenDesktopLogin();
