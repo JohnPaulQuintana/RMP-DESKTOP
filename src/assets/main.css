@@ -1,0 +1,30 @@
+@import './base.css';
+
+/* Custom Bulma-style helper */
+/* .has-background-dark-red {
+  background-color: #c01616 !important;
+
+} */
+
+html,
+body,
+#app {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(227, 227, 230);
+}
+
+/* @media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+  }
+} */
+
+

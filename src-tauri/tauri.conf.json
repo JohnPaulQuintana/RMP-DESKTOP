@@ -1,11 +1,11 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "rmp-desktop",
-  "version": "0.1.8",
+  "version": "0.1.0",
   "identifier": "com.rmp.desktop",
   "build": {
     "frontendDist": "../dist",
-    "devUrl": "http://localhost:5174",
+    "devUrl": "http://localhost:5173",
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build"
   },
@@ -20,7 +20,10 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": null,
+      "assetProtocol": {
+        "enable": true
+      }
     }
   },
   "plugins": {
@@ -29,6 +32,11 @@
       "endpoints": [
         "https://github.com/JohnPaulQuintana/RMP-DESKTOP/releases/latest/download/latest.json"
       ]
+    },
+    "deep-link": {
+      "desktop": {
+        "schemes": ["rmp"]
+      }
     }
   },
   "bundle": {

@@ -10,17 +10,47 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@tanstack/vue-form": "^1.33.2",
+    "@tanstack/vue-query": "^5.101.4",
+    "@tauri-apps/plugin-deep-link": "^2.4.9",
+    "@tauri-apps/plugin-opener": "^2.5.4",
     "@tauri-apps/plugin-process": "^2.3.1",
     "@tauri-apps/plugin-updater": "^2.10.1",
-    "vue": "^3.5.41"
+    "axios": "^1.18.1",
+    "bulma": "^1.0.4",
+    "chart.js": "^4.5.1",
+    "cors": "^2.8.6",
+    "echarts": "^6.1.0",
+    "express": "^5.2.1",
+    "firebase": "^12.18.0",
+    "lucide-vue-next": "^0.563.0",
+    "pinia": "^3.0.4",
+    "v-calendar": "^3.1.2",
+    "vue": "^3.5.41",
+    "vue-echarts": "^8.0.1",
+    "vue-router": "^5.0.1",
+    "vue-sonner": "^2.0.9",
+    "vue-toastification": "^2.0.0-rc.5",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.11.4",
+    "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.13.3",
     "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/eslint-config-typescript": "^14.6.0",
     "@vue/tsconfig": "^0.9.1",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-oxlint": "~1.42.0",
+    "eslint-plugin-vue": "~10.7.0",
+    "jiti": "^2.6.1",
+    "npm-run-all2": "^8.0.4",
+    "oxlint": "~1.42.0",
+    "prettier": "3.8.1",
     "typescript": "~6.0.2",
     "vite": "^8.2.2",
+    "vite-plugin-vue-devtools": "^8.2.1",
     "vue-tsc": "^3.3.11"
   }
 }
