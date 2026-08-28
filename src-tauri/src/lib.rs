@@ -1,6 +1,7 @@
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 
 use tauri::Emitter;
+use tauri::Manager;
 use std::sync::Mutex;
 
 
@@ -9,10 +10,12 @@ fn get_pending_auth(
     state: tauri::State<'_, Mutex<Option<String>>>
 ) -> Option<String> {
 
-    let mut pending = state.lock().unwrap();
+    let mut pending =
+        state.lock().unwrap();
 
     pending.take()
 }
+
 
 
 pub fn run() {
@@ -24,24 +27,29 @@ pub fn run() {
             Mutex::new(None::<String>)
         )
 
+
         .plugin(
             tauri_plugin_log::Builder::default()
                 .level(log::LevelFilter::Info)
                 .build(),
         )
 
+
         .plugin(
             tauri_plugin_updater::Builder::new()
                 .build()
         )
 
+
         .plugin(
             tauri_plugin_process::init()
         )
 
+
         .plugin(
             tauri_plugin_opener::init()
         )
+
 
         .plugin(
             tauri_plugin_deep_link::init()
@@ -64,7 +72,9 @@ pub fn run() {
                 use tauri_plugin_deep_link::DeepLinkExt;
 
 
-                let app_handle = app.handle().clone();
+                let app_handle =
+                    app.handle().clone();
+
 
 
                 // =====================================
@@ -93,18 +103,21 @@ pub fn run() {
 
 
                         let state =
-                            app_handle.state::<Mutex<Option<String>>>();
+                            app_handle
+                                .state::<Mutex<Option<String>>>();
 
 
                         let mut pending =
                             state.lock().unwrap();
 
 
-                        *pending = Some(arg.clone());
+                        *pending =
+                            Some(arg.clone());
 
 
                         log::info!(
-                            "Saved startup auth callback"
+                            "Saved startup auth callback: {}",
+                            arg
                         );
 
                     }
@@ -113,9 +126,14 @@ pub fn run() {
 
 
 
+
                 // =====================================
                 // App already running
                 // =====================================
+
+                let deep_link_handle =
+                    app_handle.clone();
+
 
                 app.deep_link()
                     .on_open_url(move |event| {
@@ -129,6 +147,7 @@ pub fn run() {
                             "Deep link received: {:?}",
                             urls
                         );
+
 
 
                         if let Some(url) =
@@ -146,8 +165,9 @@ pub fn run() {
                             );
 
 
+
                             let _ =
-                                app_handle.emit(
+                                deep_link_handle.emit(
                                     "desktop-auth",
                                     url
                                 );
