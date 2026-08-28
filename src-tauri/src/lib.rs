@@ -1,12 +1,28 @@
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 
 use tauri::Emitter;
-use std::time::Duration;
-use std::thread;
+use std::sync::Mutex;
+
+
+#[tauri::command]
+fn get_pending_auth(
+    state: tauri::State<'_, Mutex<Option<String>>>
+) -> Option<String> {
+
+    let mut pending = state.lock().unwrap();
+
+    pending.take()
+}
+
 
 pub fn run() {
 
     tauri::Builder::default()
+
+        // Store startup deep link
+        .manage(
+            Mutex::new(None::<String>)
+        )
 
         .plugin(
             tauri_plugin_log::Builder::default()
@@ -14,29 +30,61 @@ pub fn run() {
                 .build(),
         )
 
-        .plugin(tauri_plugin_updater::Builder::new().build())
-        .plugin(tauri_plugin_process::init())
-        .plugin(tauri_plugin_opener::init())
-        .plugin(tauri_plugin_deep_link::init())
+        .plugin(
+            tauri_plugin_updater::Builder::new()
+                .build()
+        )
+
+        .plugin(
+            tauri_plugin_process::init()
+        )
+
+        .plugin(
+            tauri_plugin_opener::init()
+        )
+
+        .plugin(
+            tauri_plugin_deep_link::init()
+        )
+
+
+        .invoke_handler(
+            tauri::generate_handler![
+                get_pending_auth
+            ]
+        )
+
 
         .setup(|app| {
 
+
             #[cfg(desktop)]
             {
+
                 use tauri_plugin_deep_link::DeepLinkExt;
+
 
                 let app_handle = app.handle().clone();
 
 
-                // App opened from rmp:// deep link
-                let args: Vec<String> = std::env::args().collect();
+                // =====================================
+                // App started from deep link
+                // =====================================
 
-                log::info!("Startup args: {:?}", args);
+                let args: Vec<String> =
+                    std::env::args().collect();
+
+
+                log::info!(
+                    "Startup args: {:?}",
+                    args
+                );
 
 
                 for arg in args {
 
                     if arg.starts_with("rmp://") {
+
 
                         log::info!(
                             "Startup deep link found: {}",
@@ -44,29 +92,38 @@ pub fn run() {
                         );
 
 
-                        let handle = app_handle.clone();
+                        let state =
+                            app_handle.state::<Mutex<Option<String>>>();
 
-                        thread::spawn(move || {
 
-                            thread::sleep(
-                                Duration::from_secs(2)
-                            );
+                        let mut pending =
+                            state.lock().unwrap();
 
-                            let _ = handle.emit(
-                                "desktop-auth",
-                                arg
-                            );
 
-                        });
+                        *pending = Some(arg.clone());
+
+
+                        log::info!(
+                            "Saved startup auth callback"
+                        );
+
                     }
+
                 }
 
 
-                // App already running and receives deep link
+
+                // =====================================
+                // App already running
+                // =====================================
+
                 app.deep_link()
                     .on_open_url(move |event| {
 
-                        let urls = event.urls();
+
+                        let urls =
+                            event.urls();
+
 
                         log::info!(
                             "Deep link received: {:?}",
@@ -74,26 +131,26 @@ pub fn run() {
                         );
 
 
-                        if let Some(url) = urls.first() {
-
-                            let handle = app_handle.clone();
-
-                            let url = url.to_string();
+                        if let Some(url) =
+                            urls.first()
+                        {
 
 
-                            thread::spawn(move || {
-
-                                thread::sleep(
-                                    Duration::from_secs(1)
-                                );
+                            let url =
+                                url.to_string();
 
 
-                                let _ = handle.emit(
+                            log::info!(
+                                "Auth callback URL: {}",
+                                url
+                            );
+
+
+                            let _ =
+                                app_handle.emit(
                                     "desktop-auth",
                                     url
                                 );
-
-                            });
 
                         }
 
@@ -103,6 +160,7 @@ pub fn run() {
 
 
             Ok(())
+
         })
 
 

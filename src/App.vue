@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { listenDesktopLogin } from '@/features/auth/composables/useDesktopAuth'
+import { listenDesktopLogin } from "@/features/auth/composables/useDesktopAuth";
 import { useAuthStore } from "@/stores/auth";
 
 const authStore = useAuthStore();
 
-onMounted(async () => {
-  console.log("App mounted");
+onMounted(() => {
   authStore.loadAuth();
-
-  await listenDesktopLogin();
+  listenDesktopLogin();
 });
 </script>
 
