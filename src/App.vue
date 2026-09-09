@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
+import { invoke } from "@tauri-apps/api/core";
 import { listenDesktopLogin } from "@/features/auth/composables/useDesktopAuth";
 import { useAuthStore } from "@/stores/auth";
 
 const authStore = useAuthStore();
 
-onMounted(() => {
+onMounted(async () => {
   authStore.loadAuth();
-  listenDesktopLogin();
+
+  await listenDesktopLogin();
 });
 </script>
 

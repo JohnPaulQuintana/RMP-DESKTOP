@@ -134,44 +134,51 @@ pub fn run() {
                 let deep_link_handle =
                     app_handle.clone();
 
-
                 app.deep_link()
                     .on_open_url(move |event| {
 
-
                         let urls =
                             event.urls();
-
 
                         log::info!(
                             "Deep link received: {:?}",
                             urls
                         );
 
-
-
                         if let Some(url) =
                             urls.first()
                         {
 
-
                             let url =
                                 url.to_string();
-
 
                             log::info!(
                                 "Auth callback URL: {}",
                                 url
                             );
 
+                            // Save the URL
+                            let state =
+                                deep_link_handle
+                                    .state::<Mutex<Option<String>>>();
 
+                            let mut pending =
+                                state.lock().unwrap();
 
+                            *pending =
+                                Some(url.clone());
+
+                            log::info!(
+                                "Saved running app auth callback: {}",
+                                url
+                            );
+
+                            // Notify Vue immediately
                             let _ =
                                 deep_link_handle.emit(
                                     "desktop-auth",
-                                    url
+                                    url,
                                 );
-
                         }
 
                     });

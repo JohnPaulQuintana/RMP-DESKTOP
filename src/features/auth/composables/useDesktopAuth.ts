@@ -1,42 +1,26 @@
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { useAuthStore } from "@/stores/auth";
-
+import router from "@/router";
 
 const handleAuth = (
   urlString: string,
-  authStore: ReturnType<typeof useAuthStore>
+  authStore: ReturnType<typeof useAuthStore>,
 ) => {
+  console.log("Desktop auth received:", urlString);
 
-  console.log(
-    "Desktop auth received:",
-    urlString
-  );
+  try {
+    const url = new URL(urlString);
 
+    const token = url.searchParams.get("token");
+    const uid = url.searchParams.get("uid");
+    const email = url.searchParams.get("email");
+    const role = url.searchParams.get("role");
 
-  const url =
-    new URL(urlString);
-
-
-  const token =
-    url.searchParams.get("token");
-
-  const uid =
-    url.searchParams.get("uid");
-
-  const email =
-    url.searchParams.get("email");
-
-  const role =
-    url.searchParams.get("role");
-
-
-  if (
-    token &&
-    uid &&
-    email &&
-    role
-  ) {
+    if (!token || !uid || !email || !role) {
+      console.error("Invalid desktop auth callback.");
+      return;
+    }
 
     authStore.setAuth(
       {
@@ -45,77 +29,41 @@ const handleAuth = (
         role,
       },
       token,
-      true
+      true,
     );
 
+    console.log("Desktop Google login successful");
 
-    console.log(
-      "Desktop Google login successful"
-    );
+    router.push("/dashboard");
+  } catch (error) {
+    console.error("Failed to process desktop auth:", error);
   }
-
 };
 
-
-
 export const listenDesktopLogin = async () => {
+  const authStore = useAuthStore();
 
-  const authStore =
-    useAuthStore();
+  // =================================
+  // Listen first
+  // =================================
 
+  await listen<string>("desktop-auth", (event) => {
+    handleAuth(event.payload, authStore);
+  });
 
   // =================================
   // Check startup deep link
   // =================================
 
   try {
-
-    const pending =
-      await invoke<string | null>(
-        "get_pending_auth"
-      );
-
+    const pending = await invoke<string | null>("get_pending_auth");
 
     if (pending) {
+      console.log("Pending desktop auth:", pending);
 
-      console.log(
-        "Pending desktop auth:",
-        pending
-      );
-
-
-      handleAuth(
-        pending,
-        authStore
-      );
-
+      handleAuth(pending, authStore);
     }
-
   } catch (error) {
-
-    console.error(
-      "Failed checking pending auth:",
-      error
-    );
-
+    console.error("Failed checking pending auth:", error);
   }
-
-
-
-  // =================================
-  // Listen when app is already open
-  // =================================
-
-  await listen<string>(
-    "desktop-auth",
-    (event)=>{
-
-      handleAuth(
-        event.payload,
-        authStore
-      );
-
-    }
-  );
-
 };
