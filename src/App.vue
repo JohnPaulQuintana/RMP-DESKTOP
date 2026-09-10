@@ -12,6 +12,8 @@ const {
   updateAvailable,
   updating,
   update,
+  updateProgress,
+  updateError,
   checkForUpdates,
   installUpdate,
   dismissUpdate,
@@ -45,6 +47,9 @@ onMounted(async () => {
           <h3 class="has-text-weight-semibold mb-1">Update available!</h3>
           <p v-if="update" class="is-size-7 has-text-grey mb-3">
             Version {{ update.version }}
+          </p>
+          <p v-if="updateError" class="has-text-danger is-size-7 mt-3">
+            Update failed: {{ updateError }}
           </p>
           <!-- What's new -->
           <div v-if="update?.body" class="update-notes">
