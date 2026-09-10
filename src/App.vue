@@ -77,7 +77,7 @@ onMounted(async () => {
             </div>
 
             <div>
-              <h3 class="has-text-weight-semibold mb-0">Update available!</h3>
+              <h3 class="has-text-weight-semibold mb-0">Update available</h3>
 
               <p v-if="update" class="is-size-7 has-text-grey mt-1">
                 Version {{ update.version }}
