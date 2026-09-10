@@ -45,7 +45,7 @@ onMounted(async () => {
 
         <!-- Content -->
         <div class="is-flex-grow-1">
-          <h3 class="has-text-weight-semibold mb-1">Update available</h3>
+          <h3 class="has-text-weight-semibold mb-1">Update available!</h3>
 
           <p class="is-size-7 has-text-grey">
             A new version of RMP Desktop is available.
