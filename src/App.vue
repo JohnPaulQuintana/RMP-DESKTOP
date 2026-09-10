@@ -53,7 +53,7 @@ onMounted(async () => {
           </p>
           <!-- What's new -->
           <div v-if="update?.body" class="update-notes">
-            <p class="is-size-7 has-text-weight-semibold mb-1">What's new</p>
+            <p class="is-size-7 has-text-weight-semibold mb-1">What's new!</p>
             <p class="is-size-7 has-text-grey">{{ update.body }}</p>
           </div>
           <div class="mt-4">
