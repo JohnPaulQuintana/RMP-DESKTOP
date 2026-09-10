@@ -45,7 +45,7 @@ jobs:
           releaseName: "RMP Desktop ${{ github.ref_name }}"
           releaseBody: |
             ## What's New
-
+            - Testing updates notifications
             - Added automatic application updates
             - Added update notifications
             - Improved Google authentication
