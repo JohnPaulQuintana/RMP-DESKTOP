@@ -43,7 +43,14 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: "RMP Desktop ${{ github.ref_name }}"
-          releaseBody: "RMP Desktop release ${{ github.ref_name }}"
+          releaseBody: |
+            ## What's New
+
+            - Added automatic application updates
+            - Added update notifications
+            - Improved Google authentication
+            - Fixed desktop deep-link authentication
+            - Improved application stability
           releaseDraft: false
           prerelease: false
           updaterJsonPreferNsis: true
