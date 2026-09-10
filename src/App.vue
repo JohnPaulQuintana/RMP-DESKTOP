@@ -39,22 +39,18 @@ onMounted(async () => {
     <div v-if="updateAvailable" class="update-notification box">
       <div class="is-flex is-align-items-flex-start">
         <!-- Icon -->
-        <div class="update-icon mr-3">
-          <RefreshCw :size="20" />
-        </div>
-
+        <div class="update-icon mr-3"><RefreshCw :size="20" /></div>
         <!-- Content -->
         <div class="is-flex-grow-1">
           <h3 class="has-text-weight-semibold mb-1">Update available!</h3>
-
-          <p class="is-size-7 has-text-grey">
-            A new version of RMP Desktop is available.
-          </p>
-
-          <p v-if="update" class="is-size-7 has-text-grey-light mt-1">
+          <p v-if="update" class="is-size-7 has-text-grey mb-3">
             Version {{ update.version }}
           </p>
-
+          <!-- What's new -->
+          <div v-if="update?.body" class="update-notes">
+            <p class="is-size-7 has-text-weight-semibold mb-1">What's new</p>
+            <p class="is-size-7 has-text-grey">{{ update.body }}</p>
+          </div>
           <div class="mt-4">
             <button
               type="button"
@@ -67,7 +63,6 @@ onMounted(async () => {
             </button>
           </div>
         </div>
-
         <!-- Close -->
         <button
           type="button"
@@ -79,57 +74,64 @@ onMounted(async () => {
       </div>
     </div>
   </Transition>
+
+  <style scoped>
+    .update-notification {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      z-index: 9999;
+      width: 360px;
+      margin: 0;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .update-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      background-color: #effaf3;
+      color: #48c78e;
+    }
+    .update-notes {
+      padding: 0.75rem;
+      border-radius: 6px;
+      background-color: #f7f9f8;
+    }
+    .update-notes p:last-child {
+      white-space: pre-line;
+    }
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 0.1s ease-in-out;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+      opacity: 0;
+    }
+
+    .fade-enter-to,
+    .fade-leave-from {
+      opacity: 1;
+    }
+
+    .update-enter-active,
+    .update-leave-active {
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .update-enter-from,
+    .update-leave-to {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  </style>
 </template>
-
-<style scoped>
-.update-notification {
-  position: fixed;
-  top: 1.25rem;
-  right: 1.25rem;
-  z-index: 9999;
-  width: 360px;
-  margin: 0;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-}
-
-.update-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: 8px;
-  background-color: #effaf3;
-  color: #48c78e;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.1s ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-to,
-.fade-leave-from {
-  opacity: 1;
-}
-
-.update-enter-active,
-.update-leave-active {
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
-
-.update-enter-from,
-.update-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-</style>
